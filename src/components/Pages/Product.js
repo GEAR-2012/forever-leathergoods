@@ -210,7 +210,7 @@ const Product = () => {
       {product && (
         <>
           {/* Product Title */}
-          <Grid className={classes.titleBar} item container xs={12} spacing={2}>
+          <Grid className={classes.titleBar} item xs={12} container spacing={2}>
             <Grid item xs={12} md={6}>
               <Typography variant="h5">{product.name}</Typography>
             </Grid>
@@ -229,7 +229,7 @@ const Product = () => {
           </Grid>
 
           {/* Picture Carousel */}
-          <Grid className={classes.carousel} item container xs={12} md={6} spacing={2}>
+          <Grid className={classes.carousel} item xs={12} md={6} spacing={2} container>
             <Grid className={classes.mainPictureContainer} item xs={12}>
               <Button onClick={handleOpenImageModal}>
                 <img className={classes.mainPicture} src={pictures[picIndex].url} alt={product.name} />
@@ -263,7 +263,7 @@ const Product = () => {
             </Grid>
           </Grid>
           {/* Product Description */}
-          <Grid className={classes.description} container item xs={12} md={6} spacing={4}>
+          <Grid className={classes.description} item xs={12} md={6} spacing={4} container>
             <Grid item xs={12}>
               <Typography variant="h4">{price}</Typography>
             </Grid>

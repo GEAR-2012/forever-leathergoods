@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, ButtonBase, Grid, IconButton, List, ListItem, Typography } from "@material-ui/core";
+import { ButtonBase, Grid, IconButton, List, ListItem, Typography } from "@material-ui/core";
 import useCreateDocument from "../../hooks/useCreateDocument";
 import SpecificationForm from "../FormUtilities/SpecificationForm";
 import useFirestore from "../../hooks/useFirestore";
@@ -25,74 +25,94 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Specifications = () => {
+const Specs = () => {
   const classes = useStyles();
-
   const { confirm, setConfirm } = AppState();
-
-  const [buttonText, setButtonText] = useState("create new specification");
-  const [specification, setSpecification] = useState(null);
-  const [selectedSpecification, setSelectedSpecification] = useState(null);
-  const [specificationToUpdate, setSpecificationToUpdate] = useState(null);
-
-  const [specificationsToDelete, setSpecificationsToDelete] = useState();
   const { specifications } = useFirestore();
 
-  useCreateDocument("specifications", specification);
-  useOverWriteDocument("specifications", specificationToUpdate?.id, specificationToUpdate?.doc);
-  useDeleteDocument("specifications", specificationsToDelete?.id);
+  const [buttonText, setButtonText] = useState("create new spec");
+
+  // state to hold user selected spec from spec list
+  const [selectedSpec, setSelectedSpec] = useState(null);
+
+  // states for pre select a spec for a operation
+  const [preSelectToCreate, setPreSelectToCreate] = useState(null);
+  const [preSelectToUpdate, setPreSelectToUpdate] = useState(null);
+  const [preSelectToDelete, setPreSelectToDelete] = useState(null);
+
+  // states for trigger hooks
+  const [specToCreate, setSpecToCreate] = useState(null);
+  const [specToUpdate, setSpecToUpdate] = useState(null);
+  const [specToDelete, setSpecToDelete] = useState(null);
+
+  // state for form state :)
+  const [isFormSubmitted, setIsFormSubmitted] = useState(false);
+
+  // hooks
+  useCreateDocument("specifications", specToCreate);
+  useOverWriteDocument("specifications", specToUpdate?.id, specToUpdate?.doc);
+  useDeleteDocument("specifications", specToDelete?.id);
 
   const handleSelectSpec = (spec) => {
-    setButtonText("update specification");
-    setSelectedSpecification(spec);
+    setButtonText("update spec");
+    setSelectedSpec(spec);
   };
 
-  // effect used to delete a specification
+  // effect used to CREATE a spec
   useEffect(() => {
-    if (confirm.response && selectedSpecification) {
-      setSpecificationsToDelete(selectedSpecification);
+    if (preSelectToCreate) {
+      setSpecToCreate(preSelectToCreate);
+      setIsFormSubmitted(true);
     }
-  }, [confirm.response, selectedSpecification]);
+  }, [preSelectToCreate]);
+
+  // effect used to UPDATE a spec
+  useEffect(() => {
+    if (confirm.response && preSelectToUpdate) {
+      setSpecToUpdate(preSelectToUpdate);
+      setIsFormSubmitted(true);
+    }
+  }, [confirm.response, preSelectToUpdate]);
+
+  // effect used to DELETE a spec
+  useEffect(() => {
+    if (confirm.response && preSelectToDelete) {
+      setSpecToDelete(preSelectToDelete);
+    }
+  }, [confirm.response, preSelectToDelete]);
 
   const handleDeleteSpec = (specId, specName) => {
-    const specification = specifications.filter((spec) => spec.id === specId)[0];
-    setSelectedSpecification(specification);
+    const spec = specifications.find((spec) => spec.id === specId);
+    setPreSelectToDelete(spec);
     setConfirm({
       open: true,
-      message: `Are you sure you want to delete the specification "${specName}"?`,
+      message: `Are you sure you want to delete the spec "${specName}"?`,
       response: false,
     });
-  };
-
-  const handleReset = () => {
-    setSelectedSpecification(undefined);
-    setButtonText("create new specification");
   };
 
   return (
     <Grid container spacing={4}>
       <Grid item xs={12}>
         <Typography variant="h3" gutterBottom>
-          Specification CRUD
+          Spec CRUD operations
         </Typography>
       </Grid>
 
       <Grid item xs={12} md={6}>
         <SpecificationForm
-          selectedSpecification={selectedSpecification}
-          setSelectedSpecification={setSelectedSpecification}
-          setSpecification={setSpecification}
-          setSpecificationToUpdate={setSpecificationToUpdate}
+          isFormSubmitted={isFormSubmitted}
+          setIsFormSubmitted={setIsFormSubmitted}
+          selectedSpec={selectedSpec}
+          setSelectedSpec={setSelectedSpec}
+          setPreSelectToCreate={setPreSelectToCreate}
+          setPreSelectToUpdate={setPreSelectToUpdate}
           setButtonText={setButtonText}
           buttonText={buttonText}
         />
-        {/* Reset button */}
-        <Button fullWidth onClick={handleReset} type="button" variant="contained" color="secondary">
-          Reset
-        </Button>
       </Grid>
 
-      {/* Existing Specification List */}
+      {/* Existing Spec List */}
       <Grid item xs={12} md={6}>
         <List>
           {specifications &&
@@ -134,4 +154,4 @@ const Specifications = () => {
   );
 };
 
-export default Specifications;
+export default Specs;

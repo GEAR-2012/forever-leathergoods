@@ -43,11 +43,13 @@ const ConfirmModal = () => {
   const handleButtonClick = (e) => {
     const btnId = e.target.parentElement.id;
     if (btnId === "0") {
+      // cancel
       setConfirm((prevState) => ({
         ...prevState,
         response: false,
       }));
     } else if (btnId === "1") {
+      // yes
       setConfirm((prevState) => ({
         ...prevState,
         response: true,

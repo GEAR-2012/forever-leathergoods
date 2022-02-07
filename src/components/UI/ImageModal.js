@@ -59,7 +59,7 @@ const ImageModal = () => {
       >
         <Fade in={openImageModal}>
           <div className={classes.paper}>
-            <Grid container xs={12} justifyContent="center">
+            <Grid container justifyContent="center">
               <Grid item xs={12}>
                 {/**/}
                 {picture && <img className={classes.image} src={picture.url} alt={picture.title} />}

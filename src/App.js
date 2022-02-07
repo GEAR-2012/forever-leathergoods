@@ -8,7 +8,6 @@ import Footer from "./components/Footer";
 import Listing from "./components/Pages/Listing";
 import { makeStyles } from "@material-ui/core/styles";
 import { Container, createTheme, ThemeProvider } from "@material-ui/core";
-import { amber, blue, grey } from "@material-ui/core/colors";
 import { AppState } from "./context/app-context";
 import Alert from "./components/UI/Alert";
 import AuthModal from "./components/Authtentication/AuthModal";
@@ -42,7 +41,8 @@ const App = () => {
         default: "#272a2c",
       },
       text: {
-        primary: "#adb5bf",
+        // primary: "#adb5bf",// too bad (almost same as disabled text)
+        primary: "#ffeebd",
       },
     },
     typography: {
