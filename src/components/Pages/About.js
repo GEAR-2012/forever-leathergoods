@@ -43,12 +43,12 @@ const About = () => {
 
   return (
     <Grid container spacing={2} justifyContent="center">
-      {/*  Test  
+      {/*  Test  */}
       {pictures && (
         <Grid item xs={8}>
           <ReactIdSwiper pictures={pictures} />
         </Grid>
-      )}*/}
+      )}
       {/*  Title  */}
       <Grid className={classes.titleBar} item xs={12}>
         <Typography variant="h4">Our Story</Typography>
@@ -71,7 +71,7 @@ const About = () => {
       {/*  Main Pic to Left  */}
       {mainPicture && !isLoading && (
         <Grid item xs={12} md={6}>
-          <img className={classes.mainPicture} src={mainPicture} alt="Main picture" />
+          <img className={classes.mainPicture} src={mainPicture} alt="Main" />
         </Grid>
       )}
       {/*  About / Story text  */}
@@ -108,12 +108,12 @@ const About = () => {
           <ProgressCircle />
         </Grid>
       )}
-      {/*  Picture Carousel  
+      {/*  Picture Carousel  */}
       {pictures && !isLoading && (
         <Grid item xs={12}>
           <Carousel pictures={pictures} />
         </Grid>
-      )}*/}
+      )}
       {/*  Contact  */}
       <Grid item xs={12}>
         <Typography variant="h5">Contact Us One way or another:</Typography>

@@ -10,6 +10,7 @@ import useGetProductsList from "../../hooks/useGetProductsList";
 import useDeleteDocument from "../../hooks/useDeleteDocument";
 import { storage } from "../../firebase/config";
 import { deleteObject, ref } from "firebase/storage";
+import { useCallback } from "react";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -32,7 +33,7 @@ const Listing = () => {
   const classes = useStyles();
   const navigate = useNavigate();
   const { catname } = useParams();
-  const { isAdmin, setAlert, confirm, setConfirm } = AppState();
+  const { isAdmin, setAlert, confirm, setConfirm, storageFolder, setStorageFolder } = AppState();
 
   const [productToDelete, setProductToDelete] = useState();
 
@@ -46,23 +47,26 @@ const Listing = () => {
 
   useDeleteDocument("products", docId);
 
-  const deleteFileFromStorage = (item) => {
-    // references
-    const fileRef = ref(storage, item.title);
+  const deleteFileFromStorage = useCallback(
+    (item) => {
+      // references
+      const fileRef = ref(storage, `productPictures/${item.title}`);
 
-    if (fileRef.name) {
-      // delete the file
-      deleteObject(fileRef)
-        .then()
-        .catch((error) => {
-          setAlert({
-            open: true,
-            message: error,
-            type: "error",
+      if (fileRef.name) {
+        // delete the file
+        deleteObject(fileRef)
+          .then()
+          .catch((error) => {
+            setAlert({
+              open: true,
+              message: error,
+              type: "error",
+            });
           });
-        });
-    }
-  };
+      }
+    },
+    [setAlert]
+  );
 
   // effect to delete a product
   useEffect(() => {
@@ -77,7 +81,7 @@ const Listing = () => {
         });
       }
     }
-  }, [confirm.response, productToDelete]);
+  }, [confirm.response, productToDelete, deleteFileFromStorage]);
 
   const handleDeleteProduct = (product) => {
     setProductToDelete(product);

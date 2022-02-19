@@ -6,9 +6,6 @@ import { db } from "../firebase/config";
 const useAboutPictures = (docPath, documentToUpload) => {
   const { setAlert } = AppState();
 
-  console.log("useAboutPicturess started");
-  console.log("documentToUpload: ", documentToUpload);
-
   useEffect(() => {
     try {
       const uploadTask = async () => {

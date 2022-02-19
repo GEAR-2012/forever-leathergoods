@@ -3,6 +3,7 @@ import { Button, makeStyles, TextField } from "@material-ui/core";
 import { AppState } from "../../context/app-context";
 import { db, timestamp } from "../../firebase/config";
 import { collection, getDocs, query, where } from "firebase/firestore";
+import { useCallback } from "react";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -39,6 +40,20 @@ const SpecForm = ({
   const [specValuesError, setSpecValuesError] = useState("");
   //
   const [isFormValid, setIsFormValid] = useState(false);
+
+  // FUNCTIONS
+  const handleReset = useCallback(() => {
+    console.log("handle reset init");
+    // Reset selected Spec
+    setSelectedSpec(undefined);
+    // Reset button text
+    setButtonText("create new spec");
+    // Reset fields
+    setSpecIndex("");
+    setSpecName("");
+    setSpecValues("");
+    setButtonText("create new spec");
+  }, [setSelectedSpec, setButtonText]);
 
   // set form validity, check for any input error
   useEffect(() => {
@@ -93,7 +108,7 @@ const SpecForm = ({
       handleReset();
       setIsFormSubmitted(false);
     }
-  }, [isFormSubmitted]);
+  }, [isFormSubmitted, handleReset, setIsFormSubmitted]);
 
   const handleCreateSpec = () => {
     // setting the spec object to upload
@@ -168,6 +183,8 @@ const SpecForm = ({
         return item;
       } else if (!isNaN(item)) {
         return Number(item);
+      } else {
+        return item;
       }
     });
 
@@ -261,18 +278,6 @@ const SpecForm = ({
     } else {
       setSpecValuesError(errorRequired);
     }
-  };
-
-  const handleReset = () => {
-    // Reset selected Spec
-    setSelectedSpec(undefined);
-    // Reset button text
-    setButtonText("create new spec");
-    // Reset fields
-    setSpecIndex("");
-    setSpecName("");
-    setSpecValues("");
-    setButtonText("create new spec");
   };
 
   return (

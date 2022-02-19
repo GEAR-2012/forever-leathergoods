@@ -7,8 +7,6 @@ import { db } from "../firebase/config";
 const useGetAbout = (aboutDocPath) => {
   const { setAlert } = AppState();
 
-  console.log("useGetAbout started");
-
   const [aboutDoc, setAboutDoc] = useState();
 
   useEffect(() => {

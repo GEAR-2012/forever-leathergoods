@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Badge, Button, Divider, Grid, Typography } from "@material-ui/core";
-import { makeStyles, withStyles } from "@material-ui/styles";
+import { makeStyles } from "@material-ui/styles";
 import { AppState } from "../../context/app-context";
 import PictureCard from "../UI/PictureCard";
 import ProgressCircle from "../UI/ProgressCircle";
@@ -11,6 +11,7 @@ import { collection, getDocs, onSnapshot, query, where } from "firebase/firestor
 import { db } from "../../firebase/config";
 import { deleteObject, ref } from "firebase/storage";
 import { storage } from "../../firebase/config";
+import { useCallback } from "react";
 
 const useStyles = makeStyles((theme) => ({
   gridRoot: {
@@ -82,38 +83,41 @@ const Categories = () => {
   useDeleteDocument("categories", categoryId);
 
   // delete only one item from firebase storage
-  const deleteFileFromStorage = (item) => {
-    // references
-    const fileRef = ref(storage, item.title);
+  const deleteFileFromStorage = useCallback(
+    (item) => {
+      // references
+      const fileRef = ref(storage, item.title);
 
-    if (fileRef.name) {
-      // delete the file
-      deleteObject(fileRef)
-        .then()
-        .catch((error) => {
-          setAlert({
-            open: true,
-            message: error,
-            type: "error",
+      if (fileRef.name) {
+        // delete the file
+        deleteObject(fileRef)
+          .then()
+          .catch((error) => {
+            setAlert({
+              open: true,
+              message: error,
+              type: "error",
+            });
           });
-        });
-    }
-  };
+      }
+    },
+    [setAlert]
+  );
 
   // if the category deletion is justified
   useEffect(() => {
     if (confirm.response === true) {
       // trigger to delete category from firestore
-      setCategoryId(category.id);
+      setCategoryId(category?.id);
       // delete category pictures from storage
-      const pictures = category.pictureList;
+      const pictures = category?.pictureList;
       if (pictures.length > 0) {
         pictures.forEach((picture) => {
           deleteFileFromStorage(picture);
         });
       }
     }
-  }, [confirm.response]);
+  }, [confirm.response, category?.id, category?.pictureList, deleteFileFromStorage]);
 
   // check if this category contains products
   useEffect(() => {
@@ -143,7 +147,7 @@ const Categories = () => {
       }
     });
     return unsub;
-  }, [categoryName, deleteTrigger]);
+  }, [categoryName, deleteTrigger, setAlert, setConfirm]);
 
   const handleSelectCategory = (catName) => {
     navigate(`/listing/${catName}`);

@@ -26,6 +26,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const errorRequired = "This field is required";
 const pathMain = "aboutMainPicture/main";
 const pathGallery = "aboutGalleryPictures/gallery";
 
@@ -33,16 +34,7 @@ const AboutPicturesForm = () => {
   const classes = useStyles();
   const { picUrls, setPicUrls, storageFolder, setStorageFolder } = AppState();
 
-  console.log("storageFolder: ", storageFolder);
-
-  // reset picture url array in app-context
-  useEffect(() => {
-    const cleanup = () => {
-      setPicUrls([]);
-    };
-    return cleanup;
-  }, []);
-
+  // ******* STATES ********
   const [isUploaded, setIsUploaded] = useState(false);
 
   // Input values & errors
@@ -52,22 +44,27 @@ const AboutPicturesForm = () => {
   const [addPicture, setAddPicture] = useState(null);
   const [addPictureError, setAddPictureError] = useState("");
 
-  const errorRequired = "This field is required";
-
   const [picturesToUpload, setPicturesToUpload] = useState();
+
+  // ******* CUSTOM HOOKS ********
   useAboutPictures(options, picturesToUpload);
-  console.log("isUploaded: ", isUploaded);
+  const aboutDoc = useGetAbout(options);
+
+  // reset picture url array in app-context when component unmounted
+  useEffect(() => {
+    return () => {
+      setPicUrls([]);
+    };
+  }, [setPicUrls]);
+
   // Reset
   useEffect(() => {
-    console.log("reset in about pictures form");
     if (isUploaded) {
       setPicturesToUpload(undefined);
       setPicUrls([]);
       setIsUploaded(false);
     }
-  }, [isUploaded]);
-
-  const aboutDoc = useGetAbout(options);
+  }, [isUploaded, setPicUrls]);
 
   // set the pictures if they already exist
   useEffect(() => {
@@ -80,9 +77,8 @@ const AboutPicturesForm = () => {
 
   useEffect(() => {
     const folder = options.split("/")[0];
-    console.log("storage folder: ", folder);
     setStorageFolder(folder); // the folder for pictures in firebase storage
-  }, [options]);
+  }, [options, setStorageFolder]);
 
   const handleSubmit = () => {
     // check if any field is empty

@@ -1,11 +1,10 @@
-import { storage } from "../firebase/config";
-import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
+import { storage } from "../firebase/config";
+import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { AppState } from "../context/app-context";
 
 const useStorage = (file) => {
-  console.log("useStorage started");
   const { storageFolder } = AppState();
 
   const [progress, setProgress] = useState(0);
@@ -41,7 +40,7 @@ const useStorage = (file) => {
         setUrl(url);
       }
     );
-  }, [file]);
+  }, [file, fileName, storageRef]);
 
   return { progress, error, url, name };
 };

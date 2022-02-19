@@ -17,6 +17,7 @@ import useGetProduct from "../../hooks/useGetProduct";
 import ProgressCircle from "../UI/ProgressCircle";
 import { storage } from "../../firebase/config";
 import useDeleteDocument from "../../hooks/useDeleteDocument";
+import { useCallback } from "react";
 
 const useStyles = makeStyles((theme) => ({
   titleBar: {
@@ -139,23 +140,26 @@ const Product = () => {
   useDeleteDocument("products", docId);
 
   // delete only one item from firebase storage
-  const deleteFileFromStorage = (item) => {
-    // references
-    const fileRef = ref(storage, item.title);
+  const deleteFileFromStorage = useCallback(
+    (item) => {
+      // references
+      const fileRef = ref(storage, item.title);
 
-    if (fileRef.name) {
-      // delete the file
-      deleteObject(fileRef)
-        .then()
-        .catch((error) => {
-          setAlert({
-            open: true,
-            message: error,
-            type: "error",
+      if (fileRef.name) {
+        // delete the file
+        deleteObject(fileRef)
+          .then()
+          .catch((error) => {
+            setAlert({
+              open: true,
+              message: error,
+              type: "error",
+            });
           });
-        });
-    }
-  };
+      }
+    },
+    [setAlert]
+  );
 
   // effect to delete a product
   useEffect(() => {
@@ -172,7 +176,7 @@ const Product = () => {
         });
       }
     }
-  }, [confirm.response, productToDelete]);
+  }, [confirm.response, productToDelete, deleteFileFromStorage]);
 
   // delete an entyre product
   const handleDeleteProduct = (product) => {
@@ -282,10 +286,12 @@ const Product = () => {
               <List dense style={{ padding: 0 }}>
                 {product.specifications
                   .filter((spec) => {
+                    let toReturn;
                     const specValue = Object.values(spec)[0];
                     if (specValue) {
-                      return spec;
+                      toReturn = spec;
                     }
+                    return toReturn;
                   })
                   .map((spec) => {
                     const specName = Object.keys(spec)[0];

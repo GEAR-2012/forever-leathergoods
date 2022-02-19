@@ -29,7 +29,7 @@ const PreviewImageList = () => {
   const classes = useStyles();
 
   const { setAlert, picUrls, setPicUrls, storageFolder } = AppState();
-  console.log(picUrls);
+
   const itemData = picUrls?.map((pic) => {
     return {
       ...pic,

@@ -12,7 +12,6 @@ const useStyles = makeStyles({
 
 const ProgressBar = ({ addPicture, setAddPicture }) => {
   const classes = useStyles();
-
   const { setPicUrls } = AppState();
 
   const { url, progress, name } = useStorage(addPicture);
@@ -26,7 +25,7 @@ const ProgressBar = ({ addPicture, setAddPicture }) => {
       });
       setAddPicture(null);
     }
-  }, [url, progress, name]);
+  }, [url, progress, name, setPicUrls, setAddPicture]);
 
   return (
     <div className={classes.root}>

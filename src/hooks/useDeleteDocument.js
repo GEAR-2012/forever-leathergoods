@@ -30,7 +30,7 @@ const useDeleteDocument = (collectionName, documentId) => {
         });
       }
     }
-  }, [collectionName, documentId, setAlert]);
+  }, [collectionName, documentId, setAlert, setConfirm]);
 };
 
 export default useDeleteDocument;

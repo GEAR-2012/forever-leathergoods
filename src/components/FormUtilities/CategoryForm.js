@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const CategoryForm = ({ category, setCategory, buttonText }) => {
-  const { picUrls, setPicUrls, storageFolder, setStorageFolder } = AppState();
+  const { picUrls, setPicUrls, setStorageFolder } = AppState();
 
   // reset picture url array in app-context
   useEffect(() => {
@@ -23,7 +23,7 @@ const CategoryForm = ({ category, setCategory, buttonText }) => {
       setPicUrls([]);
     };
     return cleanup;
-  }, []);
+  }, [setPicUrls, setStorageFolder]);
 
   // Input values & errors
   const [categoryName, setCategoryName] = useState("");

@@ -28,7 +28,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const ProductForm = ({ product, setProduct, buttonText }) => {
-  const { picUrls, setPicUrls, storageFolder, setStorageFolder } = AppState();
+  const classes = useStyles();
+  const { picUrls, setPicUrls, setStorageFolder } = AppState();
 
   // reset picture url array in app-context
   useEffect(() => {
@@ -37,30 +38,42 @@ const ProductForm = ({ product, setProduct, buttonText }) => {
       setPicUrls([]);
     };
     return cleanup;
-  }, []);
+  }, [setPicUrls, setStorageFolder]);
 
   // get categories & specifications
   const [categories, setCategories] = useState();
   const [specifications, setSpecifications] = useState();
   const { categories: getCategories, specifications: getSpecifications } = useFirestore();
+  const [specListKeys, setSpecListKeys] = useState([]);
 
+  // set 'specList' & 'specListError' into local state based on 'specListKeys'
+  useEffect(() => {
+    const specArray = [];
+    const specErrorArray = [];
+
+    specListKeys.forEach((key) => {
+      specArray.push({ [key]: "" });
+      specErrorArray.push({ [key]: "" });
+    });
+
+    setSpecList(specArray);
+    setSpecListError(specErrorArray);
+  }, [specListKeys]);
+
+  // set categories & specifications into local state
+  // making spec list key array
   useEffect(() => {
     if (getCategories && getSpecifications) {
       setCategories(getCategories);
       setSpecifications(getSpecifications);
-      // making epmty arrays
-      const specArray = [];
-      const specErrorArray = [];
+      // making spec list key array
       getSpecifications.forEach((spec) => {
         for (const key of Object.keys(spec)) {
           if (key !== "index" && key !== "id") {
-            specArray.push({ [key]: "" });
-            specErrorArray.push({ [key]: "" });
+            setSpecListKeys((prevState) => [...prevState, key]);
           }
         }
       });
-      setSpecList(specArray);
-      setSpecListError(specErrorArray);
     }
   }, [getCategories, getSpecifications]);
 
@@ -82,6 +95,9 @@ const ProductForm = ({ product, setProduct, buttonText }) => {
   const [addPicture, setAddPicture] = useState(null);
   const [addPictureError, setAddPictureError] = useState("");
 
+  console.log(specList);
+  console.log(specListError);
+
   // check if the specList all items contains values
   useEffect(() => {
     if (specList) {
@@ -89,6 +105,7 @@ const ProductForm = ({ product, setProduct, buttonText }) => {
       specList.forEach((spec) => {
         if (spec) {
           const specValue = Object.values(spec)[1];
+          // chagne it back after development!!!
           if (!specValue) setIsSpecListValid(true);
           // if (!specValue) setIsSpecListValid(false);
         }
@@ -96,23 +113,26 @@ const ProductForm = ({ product, setProduct, buttonText }) => {
     }
   }, [specList]);
 
-  // set the fields if the form used for update a product
+  // set the input fields (update mode only)
   useEffect(() => {
     if (product) {
       setCategory(product.category);
       setName(product.name);
       setDescription(product.description);
       // get the filtered specList from 'product.specifications'
-      const filledSpecList = specList.map((spec) => {
-        const specName = Object.keys(spec)[0];
-        const matching = product.specifications.filter((spec) => {
-          return Object.keys(spec)[0] === specName;
-        })[0];
+
+      const filledSpecList = specListKeys.map((key) => {
+        console.log(key);
+        let toReturn;
+        const matching = product.specifications.find((spec) => {
+          return Object.keys(spec)[0] === key;
+        });
+
         if (matching) {
-          return matching;
-        } else {
-          return spec;
+          console.log(matching);
+          toReturn = matching;
         }
+        return toReturn;
       });
       setSpecList(filledSpecList);
       //
@@ -120,10 +140,10 @@ const ProductForm = ({ product, setProduct, buttonText }) => {
       setPurchaseLink(product.purchaseLink);
       setPicUrls(product.pictureList);
     }
-  }, [product]);
+  }, [product, setPicUrls, specListKeys]);
+  // specList
 
-  const classes = useStyles();
-
+  // HANDLERS
   const errorRequired = "This field is required";
 
   const handleSubmit = () => {
@@ -148,6 +168,8 @@ const ProductForm = ({ product, setProduct, buttonText }) => {
     if (picUrls.length === 0) {
       setAddPictureError("One or more picture is required");
     }
+
+    console.log(specList);
 
     if (category && name && description && isSpecListValid && price && purchaseLink && picUrls.length > 0) {
       // setting the product object to upload / update
@@ -379,9 +401,11 @@ const ProductForm = ({ product, setProduct, buttonText }) => {
           let specListValue = "";
           const specVal = specList
             .filter((spec) => {
+              let toReturn;
               if (spec) {
-                return spec[specName];
+                toReturn = spec[specName];
               }
+              return toReturn;
             })
             .map((item) => {
               return item[specName];
@@ -404,11 +428,7 @@ const ProductForm = ({ product, setProduct, buttonText }) => {
             specListErrorValue = specErrVal;
           }
 
-          // const [specListValue] = Object.values(Object.values(specList[index]));
-          // const [specListErrorValue] = Object.values(Object.values(specListError[index]));
-          {
-            /* Specification */
-          }
+          /* Specification */
           return (
             <FormControl key={specName} error={!!specListErrorValue} variant="outlined" required={false}>
               <InputLabel id={`${specName}-label`}>{specName}</InputLabel>

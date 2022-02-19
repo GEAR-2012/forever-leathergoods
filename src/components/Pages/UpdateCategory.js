@@ -17,7 +17,7 @@ const UpdateCategory = () => {
     if (categories) {
       setCategoryToUpdate(categories.find((cat) => cat.id === catid));
     }
-  }, [categories]);
+  }, [categories, catid]);
 
   useUpdateDocument("categories", category?.id, category?.doc, "/");
 

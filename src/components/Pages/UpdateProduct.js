@@ -20,6 +20,7 @@ const UpdateProduct = () => {
 
   // product update
   const [productUpdate, setProductUpdate] = useState(null);
+
   useUpdateDocument("products", productUpdate?.id, productUpdate?.doc, `/listing/${category}`);
 
   return (
