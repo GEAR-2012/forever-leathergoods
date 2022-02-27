@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
 import { useAuth } from "../firebase/firebase-auth";
+import { checkOrientation } from "../functions/functions";
 
 const AppContext = createContext();
 
@@ -7,15 +8,36 @@ const Context = ({ children }) => {
   // style mode
   const [darkMode, setDarkMode] = useState(true);
 
+  // is the used device vertical?
+  const [isVertical, setIsVertical] = useState();
+
+  useEffect(() => {
+    setIsVertical(checkOrientation());
+  }, []);
+
+  window.addEventListener("resize", () => {
+    setIsVertical(checkOrientation());
+  });
+
+  // image placeholder
+  const placeholderImgUrl = "https://via.placeholder.com/350?text=No+Picture";
+
   // Admin
   const [isAdmin, setIsAdmin] = useState(false);
   const [currentUser, setCurrentUser] = useState();
+
   // Login / Sign Up Modal
   const [openAuth, setOpenAuth] = useState(false);
+
   // Image Modal
-  const [openImageModal, setOpenImageModal] = useState(false);
-  const [imageModalPictures, setImageModalPictures] = useState([]);
-  const [imageModalIndex, setImageModalIndex] = useState(0);
+  const [imageModal, setImageModal] = useState({
+    open: false,
+    pictures: [],
+    index: 0,
+  });
+
+  // Progress of image upload
+  const [progress, setProgress] = useState(0);
 
   // Confirm Modal
   const [confirm, setConfirm] = useState({
@@ -56,14 +78,11 @@ const Context = ({ children }) => {
       value={{
         darkMode,
         setDarkMode,
+        isVertical,
         openAuth,
         setOpenAuth,
-        openImageModal,
-        setOpenImageModal,
-        imageModalPictures,
-        setImageModalPictures,
-        imageModalIndex,
-        setImageModalIndex,
+        imageModal,
+        setImageModal,
         currentUser,
         handler,
         isAdmin,
@@ -75,6 +94,9 @@ const Context = ({ children }) => {
         setConfirm,
         storageFolder,
         setStorageFolder,
+        progress,
+        setProgress,
+        placeholderImgUrl,
       }}
     >
       {children}

@@ -15,7 +15,6 @@ const useStorage = (file) => {
   // make unique filename
   const uuid = uuidv4();
   const fileName = file.name.replace(/\.[^/.]+$/, "") + "---" + uuid;
-  console.log(storageFolder);
   //
 
   // references
