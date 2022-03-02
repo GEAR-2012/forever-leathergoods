@@ -4,6 +4,7 @@ import { Button, TextField } from "@mui/material";
 import { db } from "../../firebase/config";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { AppState } from "../../context/app-context";
+import { comaSepStringToArray } from "../../functions/functions";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -164,28 +165,6 @@ const SpecForm = ({
       });
     }
     return result;
-  };
-
-  const comaSepStringToArray = (str) => {
-    let arr = str.split(",");
-    // clean each item
-    arr = arr.map((item) => item.trim());
-    // convert string input items
-    arr = arr.map((item) => {
-      if (item === "true") {
-        return true;
-      } else if (item === "false") {
-        return false;
-      } else if (isNaN(item)) {
-        return item;
-      } else if (!isNaN(item)) {
-        return Number(item);
-      } else {
-        return item;
-      }
-    });
-
-    return arr;
   };
 
   const handleSubmit = () => {

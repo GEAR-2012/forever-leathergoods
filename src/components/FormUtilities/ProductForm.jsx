@@ -11,7 +11,6 @@ import {
   Select,
   TextField,
 } from "@mui/material";
-import useFirestore from "../../hooks/useFirestore";
 import {
   chkCategory,
   chkDescription,
@@ -32,12 +31,11 @@ const useStyles = makeStyles((theme) => ({
 
 const ProductForm = ({ productGet, setInputData, buttonText, onSubmit }) => {
   const classes = useStyles();
-  const { setAlert } = AppState();
+  const { getCategories, getSpecifications, setAlert } = AppState();
 
-  // get categories & specifications
   const [categories, setCategories] = useState();
   const [specifications, setSpecifications] = useState();
-  const { categories: getCategories, specifications: getSpecifications } = useFirestore();
+
   const [specListKeys, setSpecListKeys] = useState([]);
 
   // set 'specList' & 'specListError' into local state based on 'specListKeys'

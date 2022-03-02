@@ -1,30 +1,24 @@
 import React, { useState, useEffect } from "react";
-import { makeStyles } from "@mui/styles";
-import { Grid, Typography, IconButton, List, ListItem, ButtonBase } from "@mui/material";
-import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import { Grid, Typography } from "@mui/material";
 import SpecificationForm from "../FormUtilities/SpecificationForm";
-import useFirestore from "../../hooks/useFirestore";
+import NestedList from "../UI/NestedList";
 import useCreateDoc from "../../hooks/use-create-doc";
 import useUpdateDoc from "../../hooks/use-update-doc";
 import useDeleteDoc from "../../hooks/use-delete-doc";
 import { AppState } from "../../context/app-context";
 
-const useStyles = makeStyles((theme) => ({
-  specListItem: {
-    justifyContent: "space-between",
-    gap: 40,
-  },
-  specListData: {
-    display: "flex",
-    color: "primary",
-    gap: 20,
-  },
-}));
-
 const Specs = () => {
-  const classes = useStyles();
-  const { confirm, setConfirm } = AppState();
-  const { specifications } = useFirestore();
+  const { getSpecifications, confirm, setConfirm } = AppState();
+
+  const [specifications, setSpecifications] = useState();
+
+  useEffect(() => {
+    if (getSpecifications) {
+      if (getSpecifications.length > 0) {
+        setSpecifications(getSpecifications);
+      }
+    }
+  }, [getSpecifications]);
 
   const [buttonText, setButtonText] = useState("create new spec");
 
@@ -108,45 +102,12 @@ const Specs = () => {
         />
       </Grid>
 
-      {/* Existing Spec List */}
-      <Grid item xs={12} md={6}>
-        <List>
-          {specifications &&
-            specifications.map((spec) => {
-              let specIndex = 0;
-              let specName = "";
-              let values = [];
-
-              for (const [key, value] of Object.entries(spec)) {
-                if (key === "index") {
-                  specIndex = value;
-                } else if (key !== "id" && key !== "createdAt" && key !== "modifiedAt") {
-                  specName = key;
-                  values = value;
-                }
-              }
-              const specValues = values.join(", ");
-
-              return (
-                <ListItem className={classes.specListItem} key={specIndex}>
-                  <ButtonBase className={classes.specListData} onClick={() => handleSelectSpec(spec)}>
-                    <Typography>{specIndex}:</Typography>
-                    <Typography>{specName}:</Typography>
-                    <Typography>{specValues}</Typography>
-                  </ButtonBase>
-                  <IconButton
-                    className={classes.specListDeleteButton}
-                    size="small"
-                    color="error"
-                    onClick={() => handleDeleteSpec(spec.id, specName)}
-                  >
-                    <DeleteForeverIcon />
-                  </IconButton>
-                </ListItem>
-              );
-            })}
-        </List>
-      </Grid>
+      {/* Nested List */}
+      {specifications && (
+        <Grid item xs={12} md={6}>
+          <NestedList list={specifications} handleSelectSpec={handleSelectSpec} handleDeleteSpec={handleDeleteSpec} />
+        </Grid>
+      )}
     </Grid>
   );
 };

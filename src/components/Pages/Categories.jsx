@@ -6,7 +6,6 @@ import { db } from "../../firebase/config";
 import { collection, getDocs, onSnapshot, query, where } from "firebase/firestore";
 import PictureCard from "../UI/PictureCard";
 import ProgressCircle from "../UI/ProgressCircle";
-import useFirestore from "../../hooks/useFirestore";
 import useDeleteDocWithPics from "../../hooks/use-delete-doc-with-pics";
 import { AppState } from "../../context/app-context";
 
@@ -35,9 +34,8 @@ const useStyles = makeStyles((theme) => ({
 const Categories = () => {
   const classes = useStyles();
   const navigate = useNavigate();
-  const { categories: getCategories } = useFirestore();
 
-  const { setAlert, isAdmin, confirm, setConfirm, placeholderImgUrl } = AppState();
+  const { getCategories, setAlert, isAdmin, confirm, setConfirm, placeholderImgUrl } = AppState();
 
   const [loading, setLoading] = useState(true);
   const [categories, setCategories] = useState();
@@ -57,6 +55,7 @@ const Categories = () => {
           const q = query(collRef, where("category", "==", catName));
 
           const querySnap = await getDocs(q);
+
           const prodsInCat = [];
           querySnap.forEach((doc) => {
             prodsInCat.push(doc.id);
