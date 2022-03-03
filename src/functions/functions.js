@@ -48,3 +48,9 @@ export const comaSepStringToArray = (str) => {
 
   return arr;
 };
+
+export const cutFileExtension = (fileName) => {
+  const posOfLastDot = fileName.lastIndexOf(".");
+  const trimmedFileName = fileName.slice(0, posOfLastDot);
+  return trimmedFileName;
+};

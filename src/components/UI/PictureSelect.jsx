@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
+import { v4 as uuidv4 } from "uuid";
 import { styled } from "@mui/material/styles";
 import IconButton from "@mui/material/IconButton";
 import PhotoCamera from "@mui/icons-material/PhotoCamera";
 import useUploadPictures from "../../hooks/use-upload-pictures";
+import { cutFileExtension } from "../../functions/functions";
 import { AppState } from "../../context/app-context";
 
 const Input = styled("input")({
@@ -34,9 +36,8 @@ const PictureSelect = ({ folderName, docId }) => {
       Object.values(files).forEach((file) => {
         // making unique filename
         // this way user can upload the same images multiple times
-        const now = new Date();
-        const unixTimeStamp = now.getTime();
-        const newFileName = file.name.split(".")[0] + "___" + unixTimeStamp;
+        const newFileName = cutFileExtension(file.name) + "___" + uuidv4();
+
         // object wich will hold unique file name & the file itself
         const fileObj = { name: newFileName, file };
         fileArr.push(fileObj);
