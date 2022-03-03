@@ -3,9 +3,23 @@ import { useNavigate } from "react-router-dom";
 import { Grid, Typography } from "@mui/material";
 import CategoryForm from "../FormUtilities/CategoryForm";
 import useCreateDoc from "../../hooks/use-create-doc";
+import { AppState } from "../../context/app-context";
+
+// checks for existing category name if match found return true else false
+const checkSameCategories = (newCat, oldCategories) => {
+  const match = oldCategories.find((oldCat) => oldCat.categoryName === newCat.categoryName);
+  if (match !== undefined) {
+    return true;
+  } else {
+    return false;
+  }
+};
 
 const CreateCategory = () => {
   const navigate = useNavigate();
+
+  const { getCategories, setAlert } = AppState();
+
   // this state holds the category datas
   const initUploadData = { categoryName: "", pictureList: [] };
   const [categoryToCreate, setCategoryToCreate] = useState(initUploadData); // to send the form
@@ -17,6 +31,18 @@ const CreateCategory = () => {
   });
 
   const createCategoryHandler = () => {
+    const resp = checkSameCategories(categoryToCreate, getCategories);
+
+    if (resp) {
+      setAlert({
+        open: true,
+        message: `Category with the name of ${categoryToCreate.categoryName} is already exist.`,
+        type: "warning",
+      });
+      return;
+    }
+
+    // if category name not exists yet:
     setCategory(categoryToCreate); // trigger 'useCreateDoc'
   };
 

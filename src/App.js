@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { makeStyles } from "@mui/styles";
@@ -21,7 +21,6 @@ import ConfirmModal from "./components/UI/ConfirmModal";
 import ModifyAboutPictures from "./components/Pages/ModifyAboutPictures";
 import CreateCategory from "./components/Pages/CreateCategory";
 import { AppState } from "./context/app-context";
-import { useEffect } from "react";
 
 const darkTheme = createTheme({
   palette: {
@@ -101,11 +100,17 @@ const lightTheme = createTheme({
 const useStyles = makeStyles((theme) => ({
   blurLayer: {
     filter: "blur(2px)",
+    position: "fixed",
+    top: 0,
+    right: 0,
+    bottom: 0,
+    left: 0,
+    transition: "all 1s",
   },
   mainContainer: {
-    minHeight: "80vh",
+    minHeight: "79vh",
     padding: "1rem",
-    marginTop: "1.2rem",
+    marginTop: "14vh",
   },
 }));
 

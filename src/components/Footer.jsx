@@ -1,33 +1,23 @@
 import React from "react";
 import { AppBar, Toolbar, IconButton } from "@mui/material";
-import FacebookIcon from "@mui/icons-material/Facebook";
-import TwitterIcon from "@mui/icons-material/Twitter";
 import InstagramIcon from "@mui/icons-material/Instagram";
+import { FaEtsy } from "react-icons/fa";
 
 const Footer = () => {
   return (
     <AppBar position="static" color="inherit">
       <Toolbar>
         <IconButton
-          href="https://www.facebook.com"
+          href="https://www.etsy.com/uk/shop/ForeverLeatherGooods"
           target="_blank"
           edge="start"
           color="primary"
-          aria-label="facebook icon"
+          aria-label="etsy icon"
         >
-          <FacebookIcon />
+          <FaEtsy />
         </IconButton>
         <IconButton
-          href="https://www.twitter.com"
-          target="_blank"
-          edge="start"
-          color="primary"
-          aria-label="twitter icon"
-        >
-          <TwitterIcon />
-        </IconButton>
-        <IconButton
-          href="https://www.instagram.com"
+          href="https://www.instagram.com/forever_leather_goods"
           target="_blank"
           edge="start"
           color="primary"

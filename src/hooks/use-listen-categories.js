@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { db } from "../firebase/config";
-import { collection, onSnapshot } from "firebase/firestore";
+import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
 
 const useListenCategories = () => {
   const [categories, setCategories] = useState();
@@ -8,7 +8,8 @@ const useListenCategories = () => {
   // fetch Categories
   useEffect(() => {
     const collectionRef = collection(db, "categories");
-    const unsub = onSnapshot(collectionRef, (snapshot) => {
+    const q = query(collectionRef, orderBy("categoryName"));
+    const unsub = onSnapshot(q, (snapshot) => {
       const docs = [];
       snapshot.forEach((doc) => {
         const id = doc.id;

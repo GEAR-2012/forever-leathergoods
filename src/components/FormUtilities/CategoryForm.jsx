@@ -36,7 +36,8 @@ const CategoryForm = ({ inputData, setInputData, buttonText, onSubmit }) => {
 
   const catNameChangeHandler = (e) => {
     setCategoryNameError("");
-    setInputData((prevState) => ({ ...prevState, categoryName: e.target.value }));
+    const inpVal = e.target.value.toLowerCase();
+    setInputData((prevState) => ({ ...prevState, categoryName: inpVal }));
   };
 
   const catNameBlurHandler = () => {

@@ -12,10 +12,8 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "center",
   },
   paper: {
-    outline: "none",
     width: 400,
     backgroundColor: theme.palette.background.paper,
-    color: "white",
     borderRadius: 10,
   },
 }));
@@ -47,7 +45,7 @@ const AuthModal = () => {
       >
         <Fade in={openAuth}>
           <div className={classes.paper}>
-            <AppBar position="static" style={{ background: "transparent", color: "white" }}>
+            <AppBar position="static" style={{ borderRadius: 10 }}>
               <Tabs
                 value={value}
                 onChange={handleChange}

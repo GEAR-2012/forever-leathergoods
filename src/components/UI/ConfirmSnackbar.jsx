@@ -6,10 +6,6 @@ import { useState } from "react";
 const ConfirmSnackbar = () => {
   const [open, setOpen] = useState(true);
 
-  const handleOpen = () => {
-    setOpen(true);
-  };
-
   const handleClose = () => {
     setOpen(false);
   };

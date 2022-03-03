@@ -41,6 +41,13 @@ const Categories = () => {
   const [categories, setCategories] = useState();
   const [categoryCount, setCategoryCount] = useState([]);
 
+  // clean up
+  useEffect(() => {
+    return () => {
+      setCategories(null);
+    };
+  }, []);
+
   // get Caregories
   useEffect(() => {
     setLoading(true);
@@ -56,11 +63,8 @@ const Categories = () => {
 
           const querySnap = await getDocs(q);
 
-          const prodsInCat = [];
-          querySnap.forEach((doc) => {
-            prodsInCat.push(doc.id);
-          });
-          const catLen = prodsInCat.length;
+          const catLen = await querySnap.docs.length;
+
           setCategoryCount((prevState) => [...prevState, { catName, catLen }]);
         });
         // end of try to get category lengths
@@ -72,19 +76,27 @@ const Categories = () => {
 
   // states for delete a category
   const [category, setCategory] = useState();
-  const [categoryId, setCategoryId] = useState();
+  const [categoryIdToDelete, setCategoryIdToDelete] = useState();
   const [categoryName, setCategoryName] = useState("");
   const [deleteTrigger, setDeleteTrigger] = useState(false);
 
-  useDeleteDocWithPics("categories", categoryId);
+  useDeleteDocWithPics("categories", categoryIdToDelete).then((resp) => {
+    setCategoryIdToDelete(null);
+  });
 
   // if the category deletion is justified
   useEffect(() => {
     if (confirm.response === true) {
       // trigger to delete category from firestore
-      setCategoryId(category?.id);
+      setCategoryIdToDelete(category?.id);
+      setCategoryCount([]);
     }
-  }, [confirm.response, category?.id]);
+    setConfirm({
+      open: false,
+      message: "",
+      response: false,
+    });
+  }, [confirm.response, category?.id, setConfirm]);
 
   // check if this category contains products
   useEffect(() => {
@@ -96,7 +108,7 @@ const Categories = () => {
         productArray.push({ ...doc.data(), id: doc.id });
       });
       if (categoryName) {
-        if (productArray.length <= 0) {
+        if (productArray.length === 0) {
           // if empty
           setConfirm({
             open: true,
