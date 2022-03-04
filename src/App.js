@@ -108,7 +108,7 @@ const useStyles = makeStyles((theme) => ({
     transition: "all 1s",
   },
   mainContainer: {
-    minHeight: "79vh",
+    minHeight: "75vh",
     padding: "1rem",
     marginTop: "14vh",
   },

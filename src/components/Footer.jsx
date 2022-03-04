@@ -1,12 +1,14 @@
 import React from "react";
-import { AppBar, Toolbar, IconButton } from "@mui/material";
+import { AppBar, Toolbar, IconButton, Typography } from "@mui/material";
 import InstagramIcon from "@mui/icons-material/Instagram";
-import { FaEtsy } from "react-icons/fa";
+import { FaEtsy, FaRegCopyright } from "react-icons/fa";
 
 const Footer = () => {
+  const year = new Date().getFullYear();
+
   return (
-    <AppBar position="static" color="inherit">
-      <Toolbar>
+    <AppBar position="static" color="inherit" sx={{ py: 2, display: "grid", gap: 1 }}>
+      <Toolbar sx={{ padding: 0, minHeight: "0 !important", display: "flex", gap: 2, justifyContent: "center" }}>
         <IconButton
           href="https://www.etsy.com/uk/shop/ForeverLeatherGooods"
           target="_blank"
@@ -25,6 +27,10 @@ const Footer = () => {
         >
           <InstagramIcon />
         </IconButton>
+      </Toolbar>
+      <Toolbar sx={{ padding: 0, minHeight: "0 !important", display: "flex", gap: 1, justifyContent: "center" }}>
+        <FaRegCopyright />
+        <Typography variant="body2">GEAR webdev {year}</Typography>
       </Toolbar>
     </AppBar>
   );
