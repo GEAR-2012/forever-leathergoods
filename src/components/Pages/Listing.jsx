@@ -6,6 +6,7 @@ import PictureCard from "../UI/PictureCard";
 import ProgressCircle from "../UI/ProgressCircle";
 import useListenToProductCategory from "../../hooks/use-listen-to-product-category";
 import useDeleteDocWithPics from "../../hooks/use-delete-doc-with-pics";
+import sortByFileName from "../../functions/sortByFileName";
 import { AppState } from "../../context/app-context";
 
 const useStyles = makeStyles((theme) => ({
@@ -101,7 +102,7 @@ const Listing = () => {
           const prodName = product.name;
           let mainPicUrl = placeholderImgUrl;
           if (product.pictureList.length > 0) {
-            mainPicUrl = product.pictureList[0].url;
+            mainPicUrl = sortByFileName(product.pictureList)[0].url;
           }
 
           return (
