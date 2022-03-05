@@ -73,7 +73,7 @@ const Listing = () => {
   }, [getProducts]);
 
   return (
-    <Grid className={classes.root} container spacing={2}>
+    <Grid className={classes.root} container sx={{ mb: 6 }} spacing={2}>
       <Grid item xs={12} md={6}>
         <Typography className={classes.title} variant="h3">
           {catname}
@@ -106,7 +106,7 @@ const Listing = () => {
           }
 
           return (
-            <Grid key={prodId} item xs={12} sm={6} md={4} lg={3}>
+            <Grid key={prodId} sx={{ mt: 4 }} item xs={12} sm={6} md={4} lg={3}>
               <PictureCard
                 id={prodId}
                 title={prodName}

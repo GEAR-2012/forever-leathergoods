@@ -143,7 +143,7 @@ const Categories = () => {
   };
 
   return (
-    <Grid className={classes.gridRoot} container spacing={2}>
+    <Grid className={classes.gridRoot} container sx={{ mb: 6 }} spacing={2}>
       <Grid item xs={12} md={6}>
         <Typography variant="h3">Categories</Typography>
       </Grid>
@@ -183,7 +183,7 @@ const Categories = () => {
           const catName = category.categoryName;
           const count = categoryCount[index]?.catLen;
           return (
-            <Grid key={catId} item xs={12} sm={6} md={4} lg={3}>
+            <Grid key={catId} sx={{ mt: 4 }} item xs={12} sm={6} md={4} lg={3}>
               <Badge
                 classes={{ root: classes.badgeRoot, badge: classes.badgeBadge }}
                 invisible={!isAdmin}

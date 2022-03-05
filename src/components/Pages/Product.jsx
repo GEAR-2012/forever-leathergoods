@@ -22,9 +22,6 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     justifyContent: "space-between",
   },
-  description: {
-    alignContent: "flex-start",
-  },
   descriptionBody: {
     paddingLeft: theme.spacing(2),
   },
@@ -52,11 +49,6 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down("sm")]: {
       justifyContent: "center",
     },
-  },
-  linkButtonLabel: {
-    fontSize: "1.2rem",
-    letterSpacing: "0.05rem",
-    wordSpacing: "0.2rem",
   },
   linkButtonFullWidth: {
     width: "fit-content",
@@ -168,7 +160,7 @@ const Product = () => {
   let contentPictureCarousel = "";
   if (pictures) {
     contentPictureCarousel = (
-      <Grid item xs={12}>
+      <Grid item sx={{ my: 4 }} xs={12}>
         <MyCarousel isVertical={isVertical} pictures={pictures} onImageClick={imageClickHandler} />
       </Grid>
     );
@@ -204,8 +196,8 @@ const Product = () => {
         <Grid className={classes.linkButtonContainer} item xs={12}>
           <Button
             fullWidth
+            sx={{ mb: 3 }}
             classes={{
-              label: classes.linkButtonLabel,
               fullWidth: classes.linkButtonFullWidth,
             }}
             color="primary"
@@ -214,18 +206,28 @@ const Product = () => {
             href={product.purchaseLink}
             target="_blank"
           >
-            Buy it on Etsy
+            <Typography
+              sx={{
+                fontSize: { xs: "1.4rem", md: "1.6rem" },
+                py: { xs: 0.5, md: 1 },
+                letterSpacing: "0.05rem",
+                wordSpacing: "0.2rem",
+              }}
+              variant="h6"
+            >
+              Buy it on Etsy
+            </Typography>
           </Button>
         </Grid>
 
         {/* About the Product */}
-        <Grid className={classes.description} item xs={12} md={6} spacing={4} container>
+        <Grid sx={{ alignContent: "flex-start" }} item xs={12} spacing={6} container>
           {/* Price */}
           <Grid item xs={12}>
             <Typography variant="h4">{formatter.format(product.price)}</Typography>
           </Grid>
           {/* Description */}
-          <Grid item xs={12}>
+          <Grid item xs={12} md={6}>
             <Typography variant="h5" gutterBottom>
               Description
             </Typography>
@@ -235,7 +237,7 @@ const Product = () => {
           </Grid>
 
           {/* Specifications */}
-          <Grid item xs={12}>
+          <Grid item xs={12} md={6}>
             <Typography variant="h5" gutterBottom>
               Specifications
             </Typography>
@@ -272,7 +274,7 @@ const Product = () => {
   }
 
   return (
-    <Grid className={classes.root} container spacing={2}>
+    <Grid className={classes.root} container sx={{ mb: 6 }} spacing={2}>
       {contentLoading}
       {contentNoProduct}
       {contentProduct}

@@ -9,16 +9,17 @@ import ProgressCircle from "../UI/ProgressCircle";
 import ReactIdSwiper from "../UI/ReactIdSwiper";
 import useListenToDoc from "../../hooks/use-listen-to-doc";
 import AvatarPicture from "../../images/My avatar_400x400.jpg";
+import { ourStory } from "../../textual data/our story";
+import { ourMotto } from "../../textual data/our motto";
 import { AppState } from "../../context/app-context";
 
 const useStyles = makeStyles((theme) => ({
-  titleBar: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
   mainImage: {
     maxWidth: "100%",
+    borderRadius: theme.shape.borderRadius,
+    boxShadow: theme.shadows[8],
+    borderWidth: 1,
+    borderStyle: "solid",
   },
 }));
 
@@ -80,19 +81,46 @@ const About = () => {
 
   return (
     <Grid container spacing={6} justifyContent="center">
-      {/*  Title  */}
-      <Grid className={classes.titleBar} item xs={12}>
-        <Typography variant="h4">Our Story</Typography>
-        {isAdmin && (
+      {/*  Action Button  */}
+      {isAdmin && (
+        <Grid item xs={12}>
           <Button onClick={() => navigate("/updateaboutpictures")} variant="contained" color="primary">
             Modify Pictures
           </Button>
-        )}
+        </Grid>
+      )}
+
+      {/*  Est.  */}
+      <Grid item xs={12}>
+        <Typography sx={{ textAlign: "center", fontSize: { xs: "1rem", md: "1.8rem" }, lineHeight: 1 }} variant="body1">
+          Est. 2020
+        </Typography>
       </Grid>
 
       {/*  Divider  */}
       <Grid item xs={12}>
-        <Divider style={{ margin: "1rem 0" }} />
+        <Divider sx={{ my: 0.6 }} />
+      </Grid>
+
+      {/*  Motto  */}
+      <Grid item xs={12}>
+        <Typography
+          sx={{ textAlign: "center", fontStyle: "italic", fontSize: { xs: "1.4rem", md: "2.2rem" }, lineHeight: 1 }}
+          variant="body1"
+          color="primary"
+        >
+          {ourMotto}
+        </Typography>
+      </Grid>
+
+      {/*  Divider  */}
+      <Grid item xs={12}>
+        <Divider sx={{ my: 0.6 }} />
+      </Grid>
+
+      {/* Title */}
+      <Grid item xs={12}>
+        <Typography variant="h4">Our Story</Typography>
       </Grid>
 
       {/*  Loading  */}
@@ -111,36 +139,30 @@ const About = () => {
 
       {/*  About / Story text  */}
       <Grid item xs={12} md={6}>
-        <Typography variant="subtitle1" align="justify" paragraph>
-          My journey started with a single eyelash tweezers whitch was dropped by my wife and I was needed to repair it.
-          After I finished the tweezer repair job I tought I could make a pouch for it (from leftover leather which was
-          hanging around in my woodworking workshop) to protect the twizeers from further damage.
-        </Typography>
-        <Typography variant="subtitle1" align="justify" paragraph>
-          And that was it, I immediately fall in love with leather craft although my first pouch was rather ugly than
-          neat.
-        </Typography>
-        <Typography variant="subtitle1" align="justify" paragraph>
-          And so it's began... I ordered a few leather work tool from internet and I started to make various leather
-          stuff like lighter case, stitching chisel case, etc. and of course leather wallets bags key tag for my family
-          members. And I just made to much wallets and card holders But my enthusiasm hasn't vanished.
-        </Typography>
-        <Typography variant="subtitle1" align="justify" paragraph>
-          So I started my humble undertaking and I started to sell my products first on Etsy and eBay later in Our
-          physical shop and finally on my website.
-        </Typography>
-        <Typography variant="subtitle1" align="justify" paragraph>
-          My customers have given me the courage and perseverance to continue working. As a web developer who sits in
-          front of a computer all day, variety comes in handy and the two types of work complement each other well and
-          bring peace to my soul as well.
-        </Typography>
+        {ourStory.map((para) => (
+          <Typography
+            key={para.id}
+            sx={{ fontSize: { xs: "1rem", md: "1.2rem" } }}
+            variant="body1"
+            align="justify"
+            paragraph
+          >
+            {para.text}
+          </Typography>
+        ))}
+
         <Avatar
           variant="rounded"
-          sx={{ width: 64, height: 64, bgcolor: deepOrange[500] }}
+          sx={{ width: 64, height: 64, bgcolor: deepOrange[500], mt: 6, mb: 2 }}
           alt="Sandor Tudja"
           src={AvatarPicture}
         />
         <Typography variant="caption">Sandor / Forever Leather Goods owner /</Typography>
+      </Grid>
+
+      {/*  Divider  */}
+      <Grid item xs={12}>
+        <Divider sx={{ my: 0.6 }} />
       </Grid>
 
       {/*  Loading  */}
@@ -153,7 +175,7 @@ const About = () => {
       {/*  Picture Carousel  */}
       {!isLoading && (
         <Grid item xs={12}>
-          <Typography variant="h4" gutterBottom>
+          <Typography variant="h4" sx={{ mb: 4 }}>
             Workshop Pictures
           </Typography>
           <ReactIdSwiper pictures={galleryImages} />
