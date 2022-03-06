@@ -92,7 +92,10 @@ const About = () => {
 
       {/*  Est.  */}
       <Grid item xs={12}>
-        <Typography sx={{ textAlign: "center", fontSize: { xs: "1rem", md: "1.8rem" }, lineHeight: 1 }} variant="body1">
+        <Typography
+          sx={{ textAlign: "center", mt: 3, fontSize: { xs: "1rem", md: "1.8rem" }, lineHeight: 1 }}
+          variant="body1"
+        >
           Est. 2020
         </Typography>
       </Grid>
