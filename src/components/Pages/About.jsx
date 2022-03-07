@@ -9,6 +9,8 @@ import ProgressCircle from "../UI/ProgressCircle";
 import ReactIdSwiper from "../UI/ReactIdSwiper";
 import useListenToDoc from "../../hooks/use-listen-to-doc";
 import AvatarPicture from "../../images/My avatar_400x400.jpg";
+import collage_01 from "../../images/collage_01.jpg";
+import pormoVideo_01 from "../../videos/promo_01.mp4";
 import { ourStory } from "../../textual data/our story";
 import { ourMotto } from "../../textual data/our motto";
 import { AppState } from "../../context/app-context";
@@ -161,6 +163,19 @@ const About = () => {
           src={AvatarPicture}
         />
         <Typography variant="caption">Sandor / Forever Leather Goods owner /</Typography>
+      </Grid>
+
+      {/*  Divider  */}
+      <Grid item xs={12}>
+        <Divider sx={{ my: 0.6 }} />
+      </Grid>
+
+      {/*  Divider  */}
+      <Grid item xs={12}>
+        <video width="100%" controls poster={collage_01}>
+          <source src={pormoVideo_01} type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
       </Grid>
 
       {/*  Divider  */}
